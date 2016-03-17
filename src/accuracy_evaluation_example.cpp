@@ -3,8 +3,6 @@
 //
 
 #include "evaluation.hpp"
-#include <iostream>
-#include <vector>
 
 using namespace std;
 

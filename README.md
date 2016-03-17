@@ -134,5 +134,5 @@ Accuracy Evaluation Results
   	Fscore (Macro)(%)         : 91.58
 
 
-# NOTE
+# Note
 For Java Implementation visit [accuracy-evaluation-java](https://github.com/ashokpant/accuracy-evaluation-java.git)
