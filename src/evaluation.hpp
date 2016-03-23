@@ -161,7 +161,7 @@ public:
     }
 
     void print(){
-        cout<<"System Evaluation Results"<<endl;
+        cout<<"Accuracy Evaluation Results"<<endl;
         cout << "=======================================" << endl;
         cout<<"\tAverage System Accuracy(%): "<< _avgAccuray*100<<endl;
         cout<<"\tSystem Error(%)           : "<< _errRate*100<<endl;
