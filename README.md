@@ -20,6 +20,8 @@ A c++ implementation for calculating the accuracy metrics (Accuracy, Error Rate,
 
 # Uses
 
+(labels and outputs are matrices (labels: classes x samples | outputs: classes x samples)
+
 ```c++
     int main(int argc, char** argv) {
     
@@ -97,7 +99,39 @@ A c++ implementation for calculating the accuracy metrics (Accuracy, Error Rate,
         Evaluation evaluation = Evaluation(confusion);
         evaluation.print();
     
-        return 0;
+        return;
+    }
+
+```
+
+OR (labels and outputs are actual class values)
+
+```c++
+    int main(int argc, char** argv) {
+    
+           vector<int> targets; //{0,0,1,1,2,2}
+           vector<int> outputs; //{0,2,1,1,2,2}
+           targets.push_back(0);
+           targets.push_back(0);
+           targets.push_back(1);
+           targets.push_back(1);
+           targets.push_back(2);
+           targets.push_back(2);
+       
+           outputs.push_back(0);
+           outputs.push_back(2);
+           outputs.push_back(1);
+           outputs.push_back(1);
+           outputs.push_back(2);
+           outputs.push_back(2);
+       
+           Confusion confusion = Confusion(targets, outputs);
+           confusion.print();
+       
+           Evaluation evaluation = Evaluation(confusion);
+           evaluation.print();
+       
+           return;
     }
 
 ```
