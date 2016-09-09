@@ -10,26 +10,51 @@
 #include <vector>
 #include <tgmath.h> //round,roundf
 #include <sstream>  // std::stringstream, std::stringbuf
+#include <algorithm>
+#include <array>
 
 using namespace std;
+
 class Confusion {
 public:
     int _classes;
     int _samples;
     double _c;
-    vector <vector<double>> _per; //per[classes][4]
-    vector <vector<string>> _ind; //ind[classes][classes]
-    vector <vector<int>> _cm; //cm[classes][classes]
+    vector<vector<double>> _per; //per[classes][4]
+    vector<vector<string>> _ind; //ind[classes][classes]
+    vector<vector<int>> _cm; //cm[classes][classes]
 
     Confusion(int classes, int samples) : _classes(classes), _samples(samples),
                                           _per(classes, vector<double>(4)), _ind(classes, vector<string>(classes)),
                                           _cm(classes, vector<int>(classes)) { }
 
-    Confusion(vector <vector<double>> targets, vector <vector<double>> outputs){
-        confusion(targets,outputs);
+    Confusion(vector<vector<double>> targets, vector<vector<double>> outputs) {
+        confusion(targets, outputs);
     }
 
-    void confusion(vector <vector<double>> targets, vector <vector<double>> outputs) {
+    Confusion(vector<int> targets, vector<int> outputs) {
+        vector<vector<double>> tar;
+        vector<vector<double>> out;
+        convertToBooleanMatrix(targets, outputs, tar, out);
+        confusion(tar, out);
+    }
+
+    void convertToBooleanMatrix(vector<int> targets, vector<int> outputs, vector<vector<double>> &tar,
+                                vector<vector<double>> &out) {
+        int numClasses =
+                *max_element(targets.begin(), targets.end()) - *min_element(targets.begin(), targets.end()) + 1;
+        int numSamples = targets.size();
+        vector<vector<double>> t(numClasses, vector<double>(numSamples));
+        vector<vector<double>> o(numClasses, vector<double>(numSamples));
+        for (int i = 0; i < numSamples; ++i) {
+            t[targets.at(i)][i] = 1;
+            o[outputs.at(i)][i] = 1;
+        }
+        tar = t;
+        out = o;
+    }
+
+    void confusion(vector<vector<double>> targets, vector<vector<double>> outputs) {
         /* confusion takes an SxQ (S:Classes; Q:Samples)target and output matrices
              T and Y, where each column of T is all zeros with one 1 indicating the target
              class, and where the columns of Y have values in the range [0,1], the largest
@@ -91,7 +116,7 @@ public:
         double c = (double) count / (double) (2 * numSamples);
 
         // Confusion matrix
-        vector <vector<int>> cm(numClasses, vector<int>(numClasses));
+        vector<vector<int>> cm(numClasses, vector<int>(numClasses));
         for (int row = 0; row < numClasses; row++) {
             for (int col = 0; col < numClasses; col++) {
                 cm[row][col] = 0;
@@ -124,7 +149,7 @@ public:
         }
 
         // Indices
-        vector <vector<string>> ind(numClasses, vector<string>(numClasses));
+        vector<vector<string>> ind(numClasses, vector<string>(numClasses));
         for (int row = 0; row < numClasses; row++)
             for (int col = 0; col < numClasses; col++)
                 ind[row][col] = "";
@@ -139,7 +164,7 @@ public:
         }
 
         // Percentages
-        vector <vector<double>> per(numClasses, vector<double>(4));
+        vector<vector<double>> per(numClasses, vector<double>(4));
         for (int row = 0; row < numClasses; row++) {
             for (int col = 0; col < 4; col++) {
                 per[row][col] = 0.0;
@@ -204,11 +229,12 @@ public:
         _per = per;
     }
 
-    string itos(int i){ // convert int to string
+    string itos(int i) { // convert int to string
         stringstream s;
         s << i;
         return s.str();
     }
+
     float round(float valueToRound, int numberOfDecimalPlaces) {
         float multiplicationFactor = pow(10, numberOfDecimalPlaces);
         float interestedInZeroDPs = valueToRound * multiplicationFactor;
@@ -216,7 +242,7 @@ public:
     }
 
     void printC() {
-        cout << "\tConfusion value\n\t\tc = " << round(_c,2) << endl;
+        cout << "\tConfusion value\n\t\tc = " << round(_c, 2) << endl;
     }
 
     void printCM() {
@@ -245,7 +271,7 @@ public:
         for (int row = 0; row < _classes; row++) {
             cout << "\t\t";
             for (int col = 0; col < 4; col++) {
-                cout << round(_per[row][col],2) << " ";
+                cout << round(_per[row][col], 2) << " ";
             }
             cout << endl;
         }
@@ -258,6 +284,23 @@ public:
         printCM();
         printInd();
         printPer();
+    }
+
+    void print(vector<double> vec) {
+        for (double d:vec) {
+            cout << d << " ";
+        }
+        cout << endl;
+    }
+
+    void print(vector<vector<double>> vec) {
+        for (int i = 0; i < vec.size(); ++i) {
+            for (int j = 0; j < vec[0].size(); ++j) {
+                cout << vec[i][j] << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
     }
 };
 

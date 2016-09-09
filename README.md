@@ -138,5 +138,7 @@ Accuracy Evaluation Results
 
 For Java Implementation, visit [accuracy-evaluation-java](https://github.com/ashokpant/accuracy-evaluation-java.git)
 
+For Scala Implementation, visit [accuracy-evaluation-scala](https://github.com/ashokpant/accuracy-evaluation-scala.git)
+
 For MATLAB Implementation, visit [accuracy-evaluation-matlab](https://github.com/ashokpant/accuracy-evaluation-matlab.git)
 
