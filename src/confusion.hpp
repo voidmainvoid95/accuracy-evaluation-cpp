@@ -157,10 +157,9 @@ public:
 
         for (int col = 0; col < numSamples; col++) {
             if (ind[i[col]][j[col]] == "")
-                ind[i[col]][j[col]] = itos(col);
+                ind[i[col]][j[col]] = to_string(col);
             else
-                //ind[i[col]][j[col]] =  new StringBuilder().append(ind[i[col]][j[col]]).append(",").append(col).toString();
-                ind[i[col]][j[col]].append(ind[i[col]][j[col]]).append(",").append(itos(col));
+                ind[i[col]][j[col]] =  ind[i[col]][j[col]].append(",").append(to_string(col));
         }
 
         // Percentages

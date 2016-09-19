@@ -66,89 +66,60 @@ public:
         int numClasses = confusion._classes;
 
         //Average Accuracy (The average per-class effectiveness of a classifier)
-        double avgAccuracy=0.0;
-        double fn=0.0,fp=0.0,tp=0.0,tn=0.0;
-        for (int i=0;i<numClasses;i++){
-            fn=per[i][0];
-            fp=per[i][1];
-            tp=per[i][2];
-            tn=per[i][3];
-            avgAccuracy=+avgAccuracy+((tp+tn)/(tp+fn+fp+tn));
-        }
-        avgAccuracy=avgAccuracy/numClasses;
+        double avgAccuracy = 0.0;
 
         //Error Rate (The average per-class classification error)
-        double errRate=0.0;
-        for (int i=0;i<numClasses;i++){
-            fn=per[i][0];
-            fp=per[i][1];
-            tp=per[i][2];
-            tn=per[i][3];
-            errRate=+errRate+((fp+fn)/(tp+fn+fp+tn));
-        }
-        errRate=errRate/numClasses;
-
-        //Precision-Micro (Agreement of the data class labels with those of a classifiers if calculated from sums of per-text decisions)
-        double  numerator=0.0;
-        double  denominator=0.0;
-        for (int i=0;i<numClasses;i++){
-            fn=per[i][0];
-            fp=per[i][1];
-            tp=per[i][2];
-            tn=per[i][3];
-            numerator=numerator+tp;
-            denominator=denominator+ (tp+fp);
-        }
-        double  precisionMicro=numerator/denominator;
-
-        //Recall-Micro (Effectiveness of a classifier to identify class labels if calculated from sums of per-text decisions)
-        numerator=0.0;
-        denominator=0.0;
-        for (int i=0;i<numClasses;i++){
-            fn=per[i][0];
-            fp=per[i][1];
-            tp=per[i][2];
-            tn=per[i][3];
-            numerator=numerator+tp;
-            denominator=denominator+ (tp+fn);
-        }
-        double   recallMicro=numerator/denominator;
-
-        //Fscore-Micro (Relations between data’s positive labels and those given by a classifier based on sums of per-text decisions)
-        double beta=1;
-        numerator=((beta*beta)+1)*precisionMicro*recallMicro;
-        denominator=(beta*beta)*precisionMicro+recallMicro;
-
-        double fscoreMicro=numerator/denominator;
+        double errRate = 0.0;
 
         //Precision-Macro (An average per-class agreement of the data class labels with those of a classifiers)
-        double precisionMacro=0.0;
-        for (int i=0;i<numClasses;i++){
-            fn=per[i][0];
-            fp=per[i][1];
-            tp=per[i][2];
-            tn=per[i][3];
-            precisionMacro=precisionMacro+(tp/(tp+fp));
-        }
-        precisionMacro=precisionMacro/numClasses;
+        double precisionMacro = 0.0;
 
         //Recall-Micro (An average per-class effectiveness of a classifier to identify class labels)
-        double recallMacro=0.0;
+        double recallMacro = 0.0;
 
-        for (int i=0;i<numClasses;i++){
-            fn=per[i][0];
-            fp=per[i][1];
-            tp=per[i][2];
-            tn=per[i][3];
-            recallMacro=recallMacro+(tp/(tp+fn));
+        double beta = 1;
+        double fn = 0.0, fp = 0.0, tp = 0.0, tn = 0.0;
+
+        double pNumerator = 0.0;
+        double pDenominator = 0.0;
+
+        double rNumerator = 0.0;
+        double rDenominator = 0.0;
+
+        for (int i = 0; i < numClasses; i++) {
+            fn = per[i][0];
+            fp = per[i][1];
+            tp = per[i][2];
+            tn = per[i][3];
+            avgAccuracy = +avgAccuracy + ((tp + tn) / (tp + fn + fp + tn));
+            errRate = +errRate + ((fp + fn) / (tp + fn + fp + tn));
+            precisionMacro = precisionMacro + (tp / (tp + fp));
+            recallMacro = recallMacro + (tp / (tp + fn));
+
+            pNumerator = pNumerator + tp;
+            pDenominator = pDenominator + (tp + fp);
+
+            rNumerator = rNumerator + tp;
+            rDenominator = rDenominator + (tp + fn);
         }
-        recallMacro=recallMacro/numClasses;
+        avgAccuracy = avgAccuracy / numClasses;
+        errRate = errRate / numClasses;
+        precisionMacro = precisionMacro / numClasses;
+        recallMacro = recallMacro / numClasses;
 
         //Fscore-Macro (Relations between data’s positive labels and those given by a classifier based on a per-class average)
-        beta=1;
-        numerator=((beta*beta)+1)*precisionMacro*recallMacro;
-        denominator=(beta*beta)*precisionMacro+recallMacro;
-        double  fscoreMacro=numerator/denominator;
+        double fscoreMacro =
+                (((beta * beta) + 1) * precisionMacro * recallMacro) / ((beta * beta) * precisionMacro + recallMacro);
+
+        //Precision-Micro (Agreement of the data class labels with those of a classifiers if calculated from sums of per-text decisions)
+        double precisionMicro = pNumerator / pDenominator;
+
+        //Recall-Micro (Effectiveness of a classifier to identify class labels if calculated from sums of per-text decisions)
+        double recallMicro = rNumerator / rDenominator;
+
+        //Fscore-Micro (Relations between data’s positive labels and those given by a classifier based on sums of per-text decisions)
+        double fscoreMicro =
+                (((beta * beta) + 1) * precisionMicro * recallMicro) / ((beta * beta) * precisionMicro + recallMicro);
 
         _avgAccuray = avgAccuracy;
         _errRate = errRate;
