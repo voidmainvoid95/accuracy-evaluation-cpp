@@ -217,7 +217,7 @@ public:
         //NAN handling
         for (int row = 0; row < numClasses; row++) {
             for (int col = 0; col < 4; col++) {
-                if (per[row][col] == NAN)
+                if (isnan(per[row][col]))
                     per[row][col] = 0.0;
             }
         }
