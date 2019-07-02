@@ -12,6 +12,7 @@
 #include <sstream>  // std::stringstream, std::stringbuf
 #include <algorithm>
 #include <array>
+#include <set>
 
 using namespace std;
 
@@ -39,10 +40,16 @@ public:
         confusion(tar, out);
     }
 
+    unsigned calcNumClasses( const vector<int> & v1, const vector<int> & v2 )
+    {
+        std::set<int> all{ v1.cbegin(), v1.cend() };
+        all.insert( v2.cbegin(), v2.cend() );
+        return all.size();
+    }
+
     void convertToBooleanMatrix(vector<int> targets, vector<int> outputs, vector<vector<double>> &tar,
                                 vector<vector<double>> &out) {
-        int numClasses =
-                *max_element(targets.begin(), targets.end()) - *min_element(targets.begin(), targets.end()) + 1;
+        int numClasses = calcNumClasses( targets, outputs );
         int numSamples = targets.size();
         vector<vector<double>> t(numClasses, vector<double>(numSamples));
         vector<vector<double>> o(numClasses, vector<double>(numSamples));
