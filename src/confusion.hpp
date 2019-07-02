@@ -300,8 +300,8 @@ public:
     }
 
     void print(vector<vector<double>> vec) {
-        for (int i = 0; i < vec.size(); ++i) {
-            for (int j = 0; j < vec[0].size(); ++j) {
+        for (unsigned i = 0; i < vec.size(); ++i) {
+            for (unsigned j = 0; j < vec[0].size(); ++j) {
                 cout << vec[i][j] << " ";
             }
             cout << endl;
